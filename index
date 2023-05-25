@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lb1</title>
+    <?php
+    require_once "connection.php";
+    ?>
+</head>
+<body>
+    <div>
+        <h3>Отриманити дохід з прокату станом на обрану дату; </h3>
+        <form action="income.php">
+            <input type="date" name="date" value="2014-10-01">
+            <input type="submit" value="Отримати">
+        </form>
+    </div>
+    <div>
+        <h3>Отримати автомобілі обраного виробника; </h3>
+        <form action="vendorCar.php">
+            <select name="vendor" >
+                <?php
+                try{
+                    $stmt = $dbh->prepare("SELECT Name FROM vendors");
+                    $stmt->execute(); 
+                    $cursor = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($cursor as $vendor) {
+                        echo '<option>' . $vendor['Name'] . '</option>';
+                    }
+                } catch (PDOException $ex) {
+                    echo $ex->getMessage(); 
+                }
+                ?>
+            </select>
+            <input type="submit" value="Отримати">
+        </form>
+    </div>
+    <div>
+        <h3>Отримати вільні автомобілі на обрану дату. </h3>
+        <form action="freeCars.php">
+			<input type="date" name="freeDate" value="2014-08-15" />
+            <input type="submit" value="Отримати">
+        </form>
+    </div>
+</body>
+</html>
