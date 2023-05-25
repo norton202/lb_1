@@ -1,0 +1,19 @@
+<?php 
+require_once "connection.php";
+
+$date=$_GET["freeDate"];
+
+try {
+    $stmt = $dbh->prepare("SELECT Name FROM cars WHERE ID_Cars NOT IN (SELECT FID_Car FROM rent WHERE Date_start <= :date AND Date_end >= :date)");
+    $stmt->bindParam(':date', $date);
+    $stmt->execute();
+    $cursor = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo "Машини вільні для прокату на дату $date";
+    foreach ($cursor as $car) {
+        echo "<li>" . $car['Name'] . "</li>";
+    }
+} catch (PDOException $ex) {
+    echo $ex->getMessage(); 
+}
+
+?>
